@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,23 +9,23 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/pickerviewresultstxt"
+        android:id="@+id/picker_view_results_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:textStyle="bold"
-        android:textSize="35sp"
+        android:layout_marginBottom="20dp"
         android:text=""
-        android:layout_marginBottom="20dp"/>
+        android:textColor="@android:color/white"
+        android:textSize="35sp"
+        android:textStyle="bold" />
 
     <Button
-        android:id="@+id/openpickerviewbtn"
+        android:id="@+id/open_picker_view_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
+        android:padding="10dp"
         android:text="Open PickerView"
-        android:textColor="@android:color/white"
-        android:padding="10dp"/>
+        android:textColor="@android:color/white" />
 
 
 </LinearLayout>

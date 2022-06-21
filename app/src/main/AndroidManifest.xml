@@ -11,8 +11,11 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".PickerViewActivity"
+            android:exported="false"
             android:theme="@style/PickerViewActivityTheme" />
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

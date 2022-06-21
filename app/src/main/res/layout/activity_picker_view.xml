@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/pickerviewtransbg"
+    android:id="@+id/picker_view_transparent_bg"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_alignParentBottom="true"
@@ -9,48 +9,54 @@
     tools:context=".MainActivity">
 
     <LinearLayout
-        android:id="@+id/pickerviewbg"
+        android:id="@+id/picker_view_bg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
         android:background="@color/colorPrimary"
         android:gravity="bottom"
         android:orientation="vertical">
 
         <RelativeLayout
-            android:id="@+id/barview"
+            android:id="@+id/bar_view"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:background="@color/colorPrimaryDark">
 
 
             <Button
-                android:id="@+id/cancelbtn"
+                android:id="@+id/cancel_button"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@android:color/transparent"
+                android:gravity="center"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:text="Cancel"
                 android:textAllCaps="false"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                android:textStyle="bold" />
 
             <Button
-                android:id="@+id/donebtn"
+                android:id="@+id/done_button"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:background="@android:color/transparent"
+                android:gravity="center"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:text="Done"
                 android:textAllCaps="false"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                android:textStyle="bold" />
 
         </RelativeLayout>
 
 
         <com.example.pickerviewexample.WheelView
-            android:id="@+id/wheelview"
+            android:id="@+id/wheel_view"
             android:layout_width="match_parent"
             android:layout_height="300dp" />
 

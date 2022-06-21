@@ -14,7 +14,6 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
-import java.util.*
 
 /**
  * Author: wangjie
@@ -219,10 +218,10 @@ class WheelView : ScrollView {
             val itemView = views.getChildAt(i) as TextView
             itemView.setTypeface(null, Typeface.BOLD)
             if (position == i) {
-                itemView.setTextColor(selectedItemColor) //Selected Item Text Color
+                itemView.setTextColor(selectedItemColor) // Selected Item Text Color
                 itemView.alpha = 1f
             } else {
-                itemView.setTextColor(unselectedItemColor) //Unselected Item Text Color
+                itemView.setTextColor(unselectedItemColor) // Unselected Item Text Color
                 itemView.alpha = 0.6f
             }
         }
@@ -272,6 +271,7 @@ class WheelView : ScrollView {
 
             override fun setColorFilter(cf: ColorFilter?) {}
 
+            @SuppressWarnings("deprecation")
             override fun getOpacity(): Int {
                 return PixelFormat.UNKNOWN
             }

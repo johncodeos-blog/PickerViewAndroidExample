@@ -5,28 +5,35 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Point
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
-import androidx.annotation.RequiresApi
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import kotlinx.android.synthetic.main.activity_picker_view.*
 
 
-class PickerViewActivity() : AppCompatActivity() {
+class PickerViewActivity : AppCompatActivity() {
 
+    private lateinit var pickerViewTransparentBg: RelativeLayout
+    private lateinit var pickerViewBg: LinearLayout
+    private lateinit var barView: RelativeLayout
+    private lateinit var cancelButton: Button
+    private lateinit var doneButton: Button
 
     private var selectedItem = ""
     private var selectedItemPosition = 0
 
-    var statusBarDark = false
+    private var statusBarDark = false
 
     private var yearList = mutableListOf(
+        "2022",
+        "2021",
         "2020",
         "2019",
         "2018",
@@ -43,34 +50,26 @@ class PickerViewActivity() : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         // Remove Open/Close Activity Animations
         overridePendingTransition(0, 0)
         setContentView(R.layout.activity_picker_view)
 
+        pickerViewTransparentBg = findViewById(R.id.picker_view_transparent_bg)
+        pickerViewBg = findViewById(R.id.picker_view_bg)
+        barView = findViewById(R.id.bar_view)
+        cancelButton = findViewById(R.id.cancel_button)
+        doneButton = findViewById(R.id.done_button)
 
-        if (Build.VERSION.SDK_INT in 19..20) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                setWindowFlag(this, true)
-            }
-        }
+        window.decorView.systemUiVisibility =
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 
-        if (Build.VERSION.SDK_INT >= 19) {
-            window.decorView.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        // Show dark status bar or not
+        if (statusBarDark) {
+            this.window.decorView.systemUiVisibility =
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         }
-
-        if (Build.VERSION.SDK_INT >= 21) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                // Show dark status bar or not
-                if (statusBarDark) {
-                    this.window.decorView.systemUiVisibility =
-                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-                }
-                this.window.statusBarColor = Color.TRANSPARENT
-                setWindowFlag(this, false)
-            }
-        }
+        this.window.statusBarColor = Color.TRANSPARENT
+        setWindowFlag(this, false)
 
 
         // Fade Animation for the Semi-Transparent Black Background
@@ -82,23 +81,23 @@ class PickerViewActivity() : AppCompatActivity() {
         val maxY = mDisplaySize.y
 
         // Set the background same as Display height
-        pickerviewbg.y = maxY.toFloat()
+        pickerViewBg.y = maxY.toFloat()
         val alpha = 85 // Set Between 0-255
         val alphaColor = ColorUtils.setAlphaComponent(Color.BLACK, alpha)
         val colorAnimation = ValueAnimator.ofObject(ArgbEvaluator(), Color.TRANSPARENT, alphaColor)
         colorAnimation.duration = 500 // milliseconds
-        colorAnimation.addUpdateListener { animator -> pickerviewtransbg.setBackgroundColor(animator.animatedValue as Int) }
+        colorAnimation.addUpdateListener { animator -> pickerViewTransparentBg.setBackgroundColor(animator.animatedValue as Int) }
         colorAnimation.start()
 
 
         // PickerViewActivity Customization
-        pickerviewbg.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary))
-        barview.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
+        pickerViewBg.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary))
+        barView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
         // Empty click listener helps to stop the view from closing when you tap 'outside'
-        barview.setOnClickListener { }
+        barView.setOnClickListener { }
 
         // WheelView Customization
-        val wheelView = findViewById<WheelView>(R.id.wheelview)
+        val wheelView = findViewById<WheelView>(R.id.wheel_view)
         wheelView.selectedItemColor = Color.WHITE
         wheelView.unselectedItemColor = Color.WHITE
         wheelView.linesColor = Color.WHITE
@@ -110,7 +109,7 @@ class PickerViewActivity() : AppCompatActivity() {
         wheelView.offset = 1
 
 
-        val defaultValue = "2016"
+        val defaultValue = "2015"
 
         // Check if default value exists, if not then show the first item of on the wheelView
         if (yearList.contains(defaultValue)) {
@@ -139,18 +138,18 @@ class PickerViewActivity() : AppCompatActivity() {
 
 
         // PickerView Bar Customization
-        cancelbtn.setTextColor(Color.WHITE)
+        cancelButton.setTextColor(Color.WHITE)
 
         // Go Back by pressing 'Cancel'
-        cancelbtn.setOnClickListener {
+        cancelButton.setOnClickListener {
             onBackPressed()
         }
 
-        donebtn.setTextColor(Color.WHITE)
+        doneButton.setTextColor(Color.WHITE)
 
 
         // Returns the final selected item and position after you pressed 'Done'
-        donebtn.setOnClickListener {
+        doneButton.setOnClickListener {
 
             Log.d("Selected Item", selectedItem)
 
@@ -164,7 +163,7 @@ class PickerViewActivity() : AppCompatActivity() {
         }
 
         // Cancel PickerView when you press the background
-        pickerviewtransbg.setOnClickListener {
+        pickerViewTransparentBg.setOnClickListener {
             onBackPressed()
         }
     }
@@ -175,7 +174,6 @@ class PickerViewActivity() : AppCompatActivity() {
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
     }
 
-    @RequiresApi(Build.VERSION_CODES.KITKAT)
     private fun setWindowFlag(activity: Activity, on: Boolean) {
         val win = activity.window
         val winParams = win.attributes
@@ -195,8 +193,8 @@ class PickerViewActivity() : AppCompatActivity() {
         val alphaColor = ColorUtils.setAlphaComponent(Color.BLACK, alpha)
         val colorAnimation = ValueAnimator.ofObject(ArgbEvaluator(), alphaColor, Color.TRANSPARENT)
         colorAnimation.duration = 500 // milliseconds
-        colorAnimation.addUpdateListener { animator -> pickerviewtransbg.setBackgroundColor(animator.animatedValue as Int) }
-        slideDown(pickerviewbg)
+        colorAnimation.addUpdateListener { animator -> pickerViewTransparentBg.setBackgroundColor(animator.animatedValue as Int) }
+        slideDown(pickerViewBg)
         colorAnimation.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator) {
                 finish()
@@ -228,7 +226,7 @@ class PickerViewActivity() : AppCompatActivity() {
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
-        slideUp(pickerviewbg)
+        slideUp(pickerViewBg)
     }
 
 }
